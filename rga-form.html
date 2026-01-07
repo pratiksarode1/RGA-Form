@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FR-SEC3-F003 Return Goods Authorization Form (RGA)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- jsPDF CDN (for PDF generation) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    :root {
+      --border-color: #004e59;
+      --accent: #007c8a;
+      --bg: #f9fafb;
+      --text-main: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #e5e7eb;
+      margin: 0;
+      padding: 24px;
+      color: var(--text-main);
+    }
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      background: white;
+      border: 1px solid #d1d5db;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      padding: 24px 28px 32px;
+    }
+    .header {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+    .header-left {
+      text-align: left;
+    }
+    .header-title-main {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--border-color);
+    }
+    .header-sub {
+      font-size: 12px;
+      margin-top: 4px;
+      color: #374151;
+    }
+    .logo-box {
+      text-align: right;
+      font-size: 11px;
+      color: #4b5563;
+      line-height: 1.2;
+    }
+    .logo-box strong {
+      font-size: 16px;
+      color: var(--border-color);
+    }
+
+    form {
+      font-size: 13px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px 24px;
+      margin-bottom: 16px;
+    }
+    .field-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .field-group label {
+      width: 140px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #374151;
+    }
+    .field-group input,
+    .field-group textarea {
+      flex: 1;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #9ca3af;
+      font-size: 13px;
+    }
+    .field-group input:focus,
+    .field-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(0,124,138,0.3);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin: 8px 0 6px;
+      color: #374151;
+    }
+    .section-box {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      margin-bottom: 16px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px dashed #d1d5db;
+    }
+    button {
+      border-radius: 999px;
+      padding: 8px 16px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-primary:hover {
+      filter: brightness(0.95);
+    }
+    .helper-text {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+    .note-text {
+      font-size: 11px;
+      color: #4b5563;
+      margin-top: 14px;
+      font-style: italic;
+    }
+    @media (max-width: 720px) {
+      .header { grid-template-columns: 1fr; text-align:left; }
+      .logo-box { text-align:left; margin-top: 8px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .field-group label { width: 40%; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <div class="header-title-main">FR-SEC3-F003 Return Goods Authorization Form (RGA)</div>
+      <div class="header-sub">Complete this form before arranging return of any material.</div>
+    </div>
+    <div class="logo-box">
+      <strong>FRANKSTON<br>PACKAGING</strong><br>
+      <span>Since 1957</span><br>
+      <span>www.frankstonpackaging.com</span>
+    </div>
+  </div>
+
+  <form id="rgaForm">
+    <!-- Top grid section -->
+    <div class="grid-2">
+      <div>
+        <div class="field-group">
+          <label for="rgaNumber">RGA Number</label>
+          <input id="rgaNumber" name="rgaNumber" type="text" required />
+        </div>
+        <div class="field-group">
+          <label for="complaintNumber">Complaint Number</label>
+          <input id="complaintNumber" name="complaintNumber" type="text" required />
+        </div>
+        <div class="field-group">
+          <label for="rgaDate">Date</label>
+          <input id="rgaDate" name="rgaDate" type="date" required />
+        </div>
+        <div class="field-group">
+          <label for="customer">Customer</label>
+          <input id="customer" name="customer" type="text" required />
+        </div>
+      </div>
+
+      <div>
+        <div class="field-group">
+          <label for="jobNumber">Job/Ticket #</label>
+          <input id="jobNumber" name="jobNumber" type="text" required />
+        </div>
+        <div class="field-group">
+          <label for="quantity">Quantity</label>
+          <input id="quantity" name="quantity" type="text" placeholder="e.g. See details below" required />
+        </div>
+        <div class="field-group">
+          <label for="item">Item</label>
+          <input id="item" name="item" type="text" required />
+        </div>
+        <div class="field-group">
+          <label for="requestorName">Requestor Name</label>
+          <input id="requestorName" name="requestorName" type="text" required />
+        </div>
+      </div>
+    </div>
+
+    <!-- Pick up Address section -->
+    <div class="section-box">
+      <div class="section-title">Pick up Address</div>
+      <textarea id="pickupAddress" name="pickupAddress"
+                placeholder="Provide full address for pickup..." required></textarea>
+    </div>
+
+    <!-- Details section -->
+    <div class="section-box">
+      <div class="section-title">
+        Add details of weight of roll or number of pallets or weight of pallets or number of rolls
+      </div>
+      <textarea id="reason" name="reason"
+                placeholder="Example: 1 roll x 18 lbs, 2 rolls x 34 lbs each; total 52 lbs; 2 pallets 12x12, etc."
+                required></textarea>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn-primary" onclick="handleDownloadClick()">
+        Download PDF
+      </button>
+    </div>
+    <div class="note-text">
+      Note: please provide pickup details such as freight carrier name, account number, and tracking information (e.g., FedEx/UPS/other).
+    </div>
+  </form>
+</div>
+
+<script>
+  // Get initials from Requestor Name (e.g. "Pratik Sarode" -> "PS")
+  function getInitials(name) {
+    if (!name) return '';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) {
+      // Single word: first two letters
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+    const first = parts[0][0] || '';
+    const last = parts[parts.length - 1][0] || '';
+    return (first + last).toUpperCase();
+  }
+
+  // Apply initials into existing RGA (YYYYMMDD-###-II)
+  function applyInitialsToRga() {
+    const rgaField = document.getElementById('rgaNumber');
+    const reqField = document.getElementById('requestorName');
+    if (!rgaField || !reqField) return;
+
+    const initials = getInitials(reqField.value);
+    if (!initials) return; // don't change if no name yet
+
+    const current = rgaField.value || '';
+    if (!current) return;
+
+    const parts = current.split('-');
+    if (parts.length < 2) return;
+
+    const base = parts[0] + '-' + parts[1]; // keep date + counter
+    rgaField.value = base + '-' + initials; // add / update initials
+  }
+
+  // Auto-fill date AND auto-generate base RGA number (date-based + counter)
+  (function initForm() {
+    const dateField = document.getElementById('rgaDate');
+    if (dateField && !dateField.value) {
+      const todayStr = new Date().toISOString().substring(0, 10);
+      dateField.value = todayStr;
+    }
+
+    const rgaField = document.getElementById('rgaNumber');
+    if (rgaField && !rgaField.value) {
+      const today = new Date();
+      const y = today.getFullYear();
+      const m = String(today.getMonth() + 1).padStart(2, '0');
+      const d = String(today.getDate()).padStart(2, '0');
+      const dateKey = `${y}${m}${d}`;
+
+      const counterKey = `rgaCounter-${dateKey}`;
+      let counter = Number(localStorage.getItem(counterKey) || 0) + 1;
+      localStorage.setItem(counterKey, counter);
+
+      const base = `${dateKey}-${String(counter).padStart(3, '0')}`; // YYYYMMDD-001
+      rgaField.value = base;
+    }
+
+    // Hook up Requestor Name -> RGA initials
+    const reqField = document.getElementById('requestorName');
+    if (reqField) {
+      reqField.addEventListener('input', applyInitialsToRga);
+      // In case Requestor Name is prefilled
+      applyInitialsToRga();
+    }
+  })();
+
+  function getFormData() {
+    const form = document.getElementById('rgaForm');
+    const data = new FormData(form);
+    const obj = {};
+    for (const [k, v] of data.entries()) {
+      obj[k] = v;
+    }
+    return obj;
+  }
+
+  // Validate all required fields before generating PDF
+  function validateForm() {
+    const requiredFields = [
+      { id: 'rgaNumber',       label: 'RGA Number' },
+      { id: 'complaintNumber', label: 'Complaint Number' },
+      { id: 'rgaDate',         label: 'Date' },
+      { id: 'customer',        label: 'Customer' },
+      { id: 'jobNumber',       label: 'Job/Ticket #' },
+      { id: 'quantity',        label: 'Quantity' },
+      { id: 'item',            label: 'Item' },
+      { id: 'requestorName',   label: 'Requestor Name' },
+      { id: 'pickupAddress',   label: 'Pick up Address' },
+      { id: 'reason',          label: 'Details (weights / rolls / pallets)' }
+    ];
+
+    const missing = [];
+
+    requiredFields.forEach(field => {
+      const el = document.getElementById(field.id);
+      if (!el) return;
+      const value = (el.value || '').trim();
+      if (!value) {
+        missing.push(field.label);
+        el.style.borderColor = 'red';
+      } else {
+        el.style.borderColor = '#9ca3af'; // reset to normal
+      }
+    });
+
+    if (missing.length > 0) {
+      alert(
+        'Please fill in the following required fields before generating the PDF:\n\n' +
+        missing.join('\n')
+      );
+      return false;
+    }
+    return true;
+  }
+
+  function handleDownloadClick() {
+    if (!validateForm()) {
+      return;
+    }
+    downloadPdf();
+  }
+
+  // Generate and download PDF using jsPDF with a form-style layout
+  function downloadPdf() {
+    let JsPDFConstructor = null;
+
+    if (window.jspdf && window.jspdf.jsPDF) {
+      JsPDFConstructor = window.jspdf.jsPDF;
+    } else if (window.jsPDF) {
+      JsPDFConstructor = window.jsPDF;
+    }
+
+    if (!JsPDFConstructor) {
+      alert("PDF library (jsPDF) failed to load. Check your internet connection or browser console.");
+      return;
+    }
+
+    const doc = new JsPDFConstructor({ unit: 'pt', format: 'letter' });
+    const data = getFormData();
+
+    const margin = 40;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const contentWidth = pageWidth - margin * 2;
+
+    function labeledBox(label, value, x, y, w, h) {
+      doc.setDrawColor(0, 0, 0);
+      doc.rect(x, y, w, h);
+      doc.setFontSize(8);
+      doc.text(label, x + 4, y + 10);
+      doc.setFontSize(10);
+      const textY = y + 24;
+      const text = (value || '').toString();
+      doc.text(text, x + 4, textY);
+    }
+
+    // Header
+    let y = margin;
+
+    doc.setFontSize(12);
+    doc.text('FR-SEC3-F003 Return Goods Authorization Form (RGA)', margin, y);
+
+    doc.setFontSize(9);
+    doc.text('Complete this form before arranging return of any material.', margin, y + 14);
+
+    doc.setFontSize(11);
+    const logoX = pageWidth - margin - 140;
+    doc.text('FRANKSTON', logoX, y);
+    doc.text('PACKAGING', logoX, y + 12);
+    doc.setFontSize(9);
+    doc.text('Since 1957', logoX, y + 26);
+    doc.text('www.frankstonpackaging.com', logoX, y + 38);
+
+    y += 60;
+
+    const colWidth = contentWidth / 2;
+    const rowHeight = 36;
+
+    const x1 = margin;
+    const x2 = margin + colWidth;
+
+    // Top fields as boxes
+    labeledBox('RGA Number', data.rgaNumber, x1, y, colWidth, rowHeight);
+    labeledBox('Complaint Number', data.complaintNumber, x2, y, colWidth, rowHeight);
+    y += rowHeight;
+
+    labeledBox('Date', data.rgaDate, x1, y, colWidth, rowHeight);
+    labeledBox('Customer', data.customer, x2, y, colWidth, rowHeight);
+    y += rowHeight;
+
+    labeledBox('Job/Ticket #', data.jobNumber, x1, y, colWidth, rowHeight);
+    labeledBox('Quantity', data.quantity, x2, y, colWidth, rowHeight);
+    y += rowHeight;
+
+    labeledBox('Item', data.item, x1, y, colWidth, rowHeight);
+    labeledBox('Requestor Name', data.requestorName, x2, y, colWidth, rowHeight);
+    y += rowHeight + 12;
+
+    // Pick up Address
+    doc.setFontSize(9);
+    const pickupLabel = 'Pick up Address';
+    const pickupText = data.pickupAddress || '';
+    const pickupLines = doc.splitTextToSize(pickupText, contentWidth - 8);
+    const pickupBoxHeight = Math.max(60, 24 + pickupLines.length * 12);
+
+    doc.rect(margin, y, contentWidth, pickupBoxHeight);
+    doc.text(pickupLabel, margin + 4, y + 10);
+    doc.setFontSize(10);
+    doc.text(pickupLines, margin + 4, y + 24);
+
+    y += pickupBoxHeight + 12;
+
+    // Details
+    doc.setFontSize(9);
+    const detailsLabel = 'Add details of weight of roll or number of pallets or weight of pallets or number of rolls';
+    const detailsText = data.reason || '';
+    const detailsLines = doc.splitTextToSize(detailsText, contentWidth - 8);
+    const detailsBoxHeight = Math.max(80, 32 + detailsLines.length * 12);
+
+    doc.rect(margin, y, contentWidth, detailsBoxHeight);
+    doc.text(detailsLabel, margin + 4, y + 10);
+    doc.setFontSize(10);
+    doc.text(detailsLines, margin + 4, y + 28);
+
+    y += detailsBoxHeight + 16;
+
+    doc.setFontSize(9);
+    const noteText =
+      'Note: provide pickup details such as freight carrier, account number, and tracking information (e.g., FedEx/UPS/other).';
+    const noteLines = doc.splitTextToSize(noteText, contentWidth);
+    doc.text(noteLines, margin, y);
+
+    const fileName = `RGA_${(data.rgaNumber || 'form')}.pdf`;
+    doc.save(fileName);
+  }
+</script>
+</body>
+</html>
